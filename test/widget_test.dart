@@ -1,30 +1,78 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:petcard/main.dart';
+import 'package:petcard/shell/petcard_bottom_bar.dart';
+import 'package:petcard/shell/petcard_shell.dart';
+import 'package:petcard/shell/rutas.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  Finder enAppBar(String texto) => find.descendant(
+        of: find.byType(AppBar),
+        matching: find.text(texto),
+      );
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  Finder enBottomBar(String texto) => find.descendant(
+        of: find.byType(PetCardBottomBar),
+        matching: find.text(texto),
+      );
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  testWidgets('muestra AppBar con título PetCard y las 4 pestañas',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(const PetCardApp());
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(enAppBar('PetCard'), findsOneWidget);
+    expect(find.byType(NavigationBar), findsOneWidget);
+    expect(find.byType(PetCardBottomBar), findsOneWidget);
+    for (final destino in destinosPrincipales) {
+      expect(
+        find.descendant(
+          of: find.byType(PetCardBottomBar),
+          matching: find.byIcon(destino.icono),
+        ),
+        findsOneWidget,
+      );
+      expect(enBottomBar(destino.etiqueta), findsOneWidget);
+    }
+    expect(find.byIcon(Icons.arrow_back), findsNothing);
+    expect(find.byIcon(Icons.settings), findsOneWidget);
+    expect(find.byIcon(Icons.notifications), findsOneWidget);
+  });
+
+  testWidgets('cambia de pestaña y actualiza el título del AppBar',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(const PetCardApp());
+
+    await tester.tap(find.text('Calendario'));
+    await tester.pumpAndSettle();
+
+    expect(enAppBar('Calendario'), findsOneWidget);
+    expect(find.byIcon(Icons.arrow_back), findsNothing);
+  });
+
+  testWidgets('Configuración se apila con botón atrás y vuelve al inicio',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(const PetCardApp());
+
+    await tester.tap(find.byIcon(Icons.settings));
+    await tester.pumpAndSettle();
+
+    expect(enAppBar('Configuración'), findsOneWidget);
+    expect(find.byIcon(Icons.arrow_back), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.arrow_back));
+    await tester.pumpAndSettle();
+
+    expect(enAppBar('PetCard'), findsOneWidget);
+    expect(find.byIcon(Icons.arrow_back), findsNothing);
+  });
+
+  test('títulos de rutas', () {
+    expect(Rutas.titulo(Rutas.inicio), 'PetCard');
+    expect(Rutas.titulo(Rutas.mascotas), 'Mascotas');
+    expect(Rutas.titulo(Rutas.eventosPendientes), 'Evento de Salud');
+    expect(Rutas.titulo(Rutas.calendario), 'Calendario');
+    expect(Rutas.titulo(Rutas.configuracion), 'Configuración');
+    expect(Rutas.titulo('desconocida'), 'PetCard');
   });
 }
