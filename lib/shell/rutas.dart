@@ -6,6 +6,8 @@ abstract final class Rutas {
   static const configuracion = 'configuracion';
   static const privacidad = 'privacidad';
   static const acerca = 'acerca';
+  static const agregarMascota = 'agregar_mascota';
+  static const perfilMascota = 'perfil_mascota';
 
   static const rutasRaiz = {inicio, mascotas, eventosPendientes, calendario};
 
@@ -17,6 +19,8 @@ abstract final class Rutas {
         configuracion => 'Configuración',
         privacidad => 'Privacidad de datos',
         acerca => 'Acerca de PetCard',
+        agregarMascota => 'Agregar Mascota',
+        perfilMascota => 'Perfil de Mascota',
         _ => 'PetCard',
       };
 }

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../features/configuracion/presentation/acerca_page.dart';
 import '../features/configuracion/presentation/configuracion_page.dart';
 import '../features/configuracion/presentation/privacidad_page.dart';
+import '../features/mascotas/presentation/agregar_mascota_page.dart';
+import '../features/mascotas/presentation/perfil_mascota_page.dart';
 import '../pages/calendario_page.dart';
 import '../pages/inicio_page.dart';
 import '../pages/mascotas_page.dart';
@@ -93,6 +95,10 @@ class _PetCardShellState extends State<PetCardShell> {
   Route<dynamic> _generarRuta(RouteSettings settings) {
     final pagina = switch (settings.name) {
       Rutas.mascotas => const MascotasPage(),
+      Rutas.agregarMascota => const AgregarMascotaPage(),
+      Rutas.perfilMascota => PerfilMascotaPage(
+          mascotaId: settings.arguments as int,
+        ),
       Rutas.eventosPendientes => const SaludPage(),
       Rutas.calendario => const CalendarioPage(),
       Rutas.configuracion => const ConfiguracionPage(),
