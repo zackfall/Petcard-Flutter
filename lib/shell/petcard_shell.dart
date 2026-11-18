@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../features/configuracion/presentation/acerca_page.dart';
+import '../features/configuracion/presentation/configuracion_page.dart';
+import '../features/configuracion/presentation/privacidad_page.dart';
 import '../pages/calendario_page.dart';
-import '../pages/configuracion_page.dart';
 import '../pages/inicio_page.dart';
 import '../pages/mascotas_page.dart';
 import '../pages/salud_page.dart';
@@ -94,6 +96,8 @@ class _PetCardShellState extends State<PetCardShell> {
       Rutas.eventosPendientes => const SaludPage(),
       Rutas.calendario => const CalendarioPage(),
       Rutas.configuracion => const ConfiguracionPage(),
+      Rutas.privacidad => const PrivacidadPage(),
+      Rutas.acerca => const AcercaPage(),
       _ => const InicioPage(),
     };
     return MaterialPageRoute(settings: settings, builder: (_) => pagina);

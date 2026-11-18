@@ -4,6 +4,8 @@ abstract final class Rutas {
   static const eventosPendientes = 'eventos_pendientes';
   static const calendario = 'calendario';
   static const configuracion = 'configuracion';
+  static const privacidad = 'privacidad';
+  static const acerca = 'acerca';
 
   static const rutasRaiz = {inicio, mascotas, eventosPendientes, calendario};
 
@@ -13,6 +15,8 @@ abstract final class Rutas {
         eventosPendientes => 'Evento de Salud',
         calendario => 'Calendario',
         configuracion => 'Configuración',
+        privacidad => 'Privacidad de datos',
+        acerca => 'Acerca de PetCard',
         _ => 'PetCard',
       };
 }
