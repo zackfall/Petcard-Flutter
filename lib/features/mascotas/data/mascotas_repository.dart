@@ -15,6 +15,9 @@ abstract class MascotasRepository extends ChangeNotifier {
 
   List<Evento> eventosDeMascota(int mascotaId);
 
+    List<Evento> get eventos;
+  Future<void> eliminarMascota(int id);
+  
   /// Devuelve el id asignado.
   Future<int> guardarMascota(Mascota mascota);
 
