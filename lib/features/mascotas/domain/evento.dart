@@ -50,16 +50,32 @@ class Evento {
   final DateTime? proxima;
   final bool hecho;
 
-  Evento copyWith({int? id}) => Evento(
+  /// Los campos anulables (`horaMinutos`, `lugar`, `notas`, `proxima`) van
+  /// como función para poder poner null a propósito, igual que en
+  /// `AgregarMascotaUiState.copyWith`: `copyWith(proxima: () => null)` quita
+  /// el recordatorio; omitir el parámetro lo deja igual.
+  Evento copyWith({
+    int? id,
+    int? mascotaId,
+    TipoEvento? tipo,
+    String? titulo,
+    DateTime? fecha,
+    int? Function()? horaMinutos,
+    String? Function()? lugar,
+    String? Function()? notas,
+    DateTime? Function()? proxima,
+    bool? hecho,
+  }) =>
+      Evento(
         id: id ?? this.id,
-        mascotaId: mascotaId,
-        tipo: tipo,
-        titulo: titulo,
-        fecha: fecha,
-        horaMinutos: horaMinutos,
-        lugar: lugar,
-        notas: notas,
-        proxima: proxima,
-        hecho: hecho,
+        mascotaId: mascotaId ?? this.mascotaId,
+        tipo: tipo ?? this.tipo,
+        titulo: titulo ?? this.titulo,
+        fecha: fecha ?? this.fecha,
+        horaMinutos: horaMinutos != null ? horaMinutos() : this.horaMinutos,
+        lugar: lugar != null ? lugar() : this.lugar,
+        notas: notas != null ? notas() : this.notas,
+        proxima: proxima != null ? proxima() : this.proxima,
+        hecho: hecho ?? this.hecho,
       );
 }

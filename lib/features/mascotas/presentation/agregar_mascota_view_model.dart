@@ -76,8 +76,7 @@ class AgregarMascotaUiState {
 }
 
 class AgregarMascotaViewModel extends ChangeNotifier {
-  AgregarMascotaViewModel({required MascotasRepository repositorio})
-      : _repositorio = repositorio;
+  AgregarMascotaViewModel({required this._repositorio});
 
   final MascotasRepository _repositorio;
   AgregarMascotaUiState _estado = const AgregarMascotaUiState();

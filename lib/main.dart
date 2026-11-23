@@ -5,12 +5,15 @@ import 'features/configuracion/data/ajustes_repository.dart';
 import 'features/configuracion/data/ajustes_repository_impl.dart';
 import 'features/mascotas/data/mascotas_repository.dart';
 import 'features/mascotas/data/mascotas_repository_impl.dart';
+import 'notifications/notificaciones.dart';
 import 'shell/petcard_shell.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final ajustes = AjustesRepositoryImpl();
   await ajustes.cargar();
+  // Canal de recordatorios listo antes de que cualquier pantalla lo use.
+  await Notificaciones.inicializar();
   runApp(PetCardApp(ajustes: ajustes));
 }
 

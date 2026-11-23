@@ -27,10 +27,9 @@ class PerfilMascotaUiState {
 
 class PerfilMascotaViewModel extends ChangeNotifier {
   PerfilMascotaViewModel({
-    required MascotasRepository repositorio,
-    required int mascotaId,
-  })  : _repositorio = repositorio,
-        _mascotaId = mascotaId {
+    required this._repositorio,
+    required this._mascotaId,
+  }) {
     _estado = _leer();
     // El repositorio avisa cuando cambia algo (nueva mascota, nuevo evento).
     _repositorio.addListener(_alCambiarRepositorio);

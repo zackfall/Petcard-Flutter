@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../shared/colores_petcard.dart';
 import '../../../shared/fechas.dart';
+import '../../../shell/rutas.dart';
 import '../data/mascotas_repository.dart';
 import '../domain/evento.dart';
 import 'foto_mascota.dart';
@@ -25,9 +26,8 @@ class PerfilMascotaPage extends StatelessWidget {
       child: Consumer<PerfilMascotaViewModel>(
         builder: (context, vm, _) => _PerfilMascotaContent(
           estado: vm.estado,
-          onNuevoEvento: () {
-            // Pendiente: aún no se migra la pantalla Nuevo Evento.
-          },
+          onNuevoEvento: () =>
+              Navigator.of(context).pushNamed(Rutas.nuevoEvento),
         ),
       ),
     );

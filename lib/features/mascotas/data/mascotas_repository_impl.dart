@@ -42,8 +42,54 @@ class MascotasRepositoryImpl extends MascotasRepository {
     return id;
   }
 
-    @override
+  @override
   List<Evento> get eventos => List.unmodifiable(_eventos);
+
+  @override
+  List<Evento> get pendientes {
+    final lista = _eventos.where((e) => !e.hecho).toList()
+      ..sort((a, b) {
+        final porFecha = a.fecha.compareTo(b.fecha);
+        if (porFecha != 0) return porFecha;
+        // Sin hora va después de los que sí tienen (ASC con null al final).
+        final ha = a.horaMinutos, hb = b.horaMinutos;
+        if (ha == null && hb == null) return 0;
+        if (ha == null) return 1;
+        if (hb == null) return -1;
+        return ha.compareTo(hb);
+      });
+    return lista;
+  }
+
+  @override
+  Evento? eventoPorId(int id) {
+    for (final e in _eventos) {
+      if (e.id == id) return e;
+    }
+    return null;
+  }
+
+  @override
+  Future<void> actualizarEvento(Evento evento) async {
+    final i = _eventos.indexWhere((e) => e.id == evento.id);
+    if (i == -1) return;
+    _eventos[i] = evento;
+    notifyListeners();
+  }
+
+  @override
+  Future<void> eliminarEvento(int id) async {
+    _eventos.removeWhere((e) => e.id == id);
+    notifyListeners();
+  }
+
+  @override
+  Future<void> marcarEventoHecho(int id) async {
+    final i = _eventos.indexWhere((e) => e.id == id);
+    if (i == -1) return;
+    _eventos[i] = _eventos[i].copyWith(hecho: true);
+    notifyListeners();
+  }
 
   @override
   Future<void> eliminarMascota(int id) async {
