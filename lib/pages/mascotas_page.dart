@@ -2,46 +2,77 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../features/mascotas/data/mascotas_repository.dart';
+import '../features/mascotas/domain/mascota.dart';
+import '../shared/colores_petcard.dart';
 import '../shell/rutas.dart';
 
-/// Lista TEMPORAL de mascotas: solo sirve para llegar a Agregar Mascota y al
-/// Perfil mientras se migra la pantalla completa de Mascotas.
 class MascotasPage extends StatelessWidget {
   const MascotasPage({super.key});
 
+  String _proximo(MascotasRepository repo, Mascota m) {
+    final n = DateTime.now();
+    final hoy = DateTime(n.year, n.month, n.day);
+    final futuros = repo
+        .eventosDeMascota(m.id)
+        .where((e) => !e.hecho && !e.fecha.isBefore(hoy))
+        .toList()
+      ..sort((a, b) => a.fecha.compareTo(b.fecha));
+    if (futuros.isEmpty) return 'Sin seguimientos';
+    final dias = futuros.first.fecha.difference(hoy).inDays;
+    return 'Próx. Seguimiento: ${dias == 0 ? 'Hoy' : dias == 1 ? 'Mañana' : '${futuros.first.fecha.day}/${futuros.first.fecha.month}'}';
+  }
+
   @override
   Widget build(BuildContext context) {
-    final mascotas = context.watch<MascotasRepository>().mascotas;
+    final repo = context.watch<MascotasRepository>();
     final tema = Theme.of(context);
 
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        FilledButton.icon(
-          onPressed: () =>
-              Navigator.of(context).pushNamed(Rutas.agregarMascota),
-          icon: const Icon(Icons.add),
-          label: const Text('Agregar Mascota'),
-        ),
-        const SizedBox(height: 12),
-        Text('Tus Mascotas', style: tema.textTheme.titleMedium),
-        const SizedBox(height: 12),
-        if (mascotas.isEmpty)
-          Text(
-            'Aún no tienes mascotas registradas.',
-            style: tema.textTheme.bodyMedium?.copyWith(
-              color: tema.colorScheme.onSurfaceVariant,
-            ),
+        Center(
+          child: TextButton.icon(
+            onPressed: () =>
+                Navigator.of(context).pushNamed(Rutas.agregarMascota),
+            icon: const Icon(Icons.add, color: verdePetCard),
+            label: const Text('Agregar Mascota',
+                style: TextStyle(
+                    color: verdePetCard, fontWeight: FontWeight.w600)),
           ),
-        for (final mascota in mascotas)
-          Card(
-            child: ListTile(
-              title: Text(mascota.nombre),
-              subtitle: Text(mascota.lineaPerfil),
-              onTap: () => Navigator.of(context).pushNamed(
-                Rutas.perfilMascota,
-                arguments: mascota.id,
-              ),
+        ),
+        const SizedBox(height: 8),
+        Text('Tus Mascotas', style: tema.textTheme.titleMedium),
+        const SizedBox(height: 8),
+        if (repo.mascotas.isEmpty)
+          const Text('Aún no tienes mascotas registradas.'),
+        for (final m in repo.mascotas)
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const CircleAvatar(child: Icon(Icons.pets)),
+            title: Text(m.nombre,
+                style: const TextStyle(fontWeight: FontWeight.bold)),
+            subtitle: Text(_proximo(repo, m)),
+            onTap: () => Navigator.of(context)
+                .pushNamed(Rutas.perfilMascota, arguments: m.id),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  tooltip: 'Editar',
+                  icon: const Icon(Icons.edit_outlined),
+                  onPressed: () {/* pendiente: pantalla de edición */},
+                ),
+                IconButton(
+                  tooltip: 'Agregar evento',
+                  icon: const Icon(Icons.add),
+                  onPressed: () {/* pendiente: nuevo evento */},
+                ),
+                IconButton(
+                  tooltip: 'Eliminar',
+                  icon: const Icon(Icons.delete_outline),
+                  onPressed: () => repo.eliminarMascota(m.id),
+                ),
+              ],
             ),
           ),
       ],

@@ -41,4 +41,14 @@ class MascotasRepositoryImpl extends MascotasRepository {
     notifyListeners();
     return id;
   }
+
+    @override
+  List<Evento> get eventos => List.unmodifiable(_eventos);
+
+  @override
+  Future<void> eliminarMascota(int id) async {
+    _mascotas.removeWhere((m) => m.id == id);
+    _eventos.removeWhere((e) => e.mascotaId == id);
+    notifyListeners();
+  }
 }

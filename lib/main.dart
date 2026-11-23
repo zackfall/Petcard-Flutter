@@ -21,7 +21,7 @@ class PetCardApp extends StatelessWidget {
   /// en pruebas). Si no se entrega, se crea uno sin preferencia guardada.
   final AjustesRepository? ajustes;
 
-  static const _semilla = Color(0xFF6650A4);
+  static const _semilla = Color(0xFF17A085);
 
   @override
   Widget build(BuildContext context) {
