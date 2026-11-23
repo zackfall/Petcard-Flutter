@@ -8,6 +8,7 @@ abstract final class Rutas {
   static const acerca = 'acerca';
   static const agregarMascota = 'agregar_mascota';
   static const perfilMascota = 'perfil_mascota';
+  static const nuevoEvento = 'nuevo_evento';
 
   static const rutasRaiz = {inicio, mascotas, eventosPendientes, calendario};
 
@@ -21,6 +22,7 @@ abstract final class Rutas {
         acerca => 'Acerca de PetCard',
         agregarMascota => 'Agregar Mascota',
         perfilMascota => 'Perfil de Mascota',
+        nuevoEvento => 'Nuevo Evento',
         _ => 'PetCard',
       };
 }

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../features/calendario/presentation/calendario_page.dart';
 import '../features/configuracion/presentation/acerca_page.dart';
 import '../features/configuracion/presentation/configuracion_page.dart';
 import '../features/configuracion/presentation/privacidad_page.dart';
+import '../features/eventos/presentation/eventos_pendientes_page.dart';
+import '../features/eventos/presentation/nuevo_evento_page.dart';
 import '../features/mascotas/presentation/agregar_mascota_page.dart';
 import '../features/mascotas/presentation/perfil_mascota_page.dart';
-import '../pages/calendario_page.dart';
 import '../pages/inicio_page.dart';
 import '../pages/mascotas_page.dart';
-import '../pages/salud_page.dart';
 import 'petcard_bottom_bar.dart';
 import 'rutas.dart';
 
@@ -84,7 +85,10 @@ class _PetCardShellState extends State<PetCardShell> {
       return [
         IconButton(
           tooltip: 'Nuevo evento',
-          onPressed: () {},
+          onPressed: () {
+            final nav = _navigatorKey.currentState;
+            if (nav != null) NuevoEventoPage.abrir(context, navigator: nav);
+          },
           icon: const Icon(Icons.add),
         ),
       ];
@@ -99,8 +103,9 @@ class _PetCardShellState extends State<PetCardShell> {
       Rutas.perfilMascota => PerfilMascotaPage(
           mascotaId: settings.arguments as int,
         ),
-      Rutas.eventosPendientes => const SaludPage(),
+      Rutas.eventosPendientes => const EventosPendientesPage(),
       Rutas.calendario => const CalendarioPage(),
+      Rutas.nuevoEvento => const NuevoEventoPage(),
       Rutas.configuracion => const ConfiguracionPage(),
       Rutas.privacidad => const PrivacidadPage(),
       Rutas.acerca => const AcercaPage(),

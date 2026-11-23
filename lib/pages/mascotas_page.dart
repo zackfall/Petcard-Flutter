@@ -27,55 +27,63 @@ class MascotasPage extends StatelessWidget {
     final repo = context.watch<MascotasRepository>();
     final tema = Theme.of(context);
 
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        Center(
-          child: TextButton.icon(
-            onPressed: () =>
-                Navigator.of(context).pushNamed(Rutas.agregarMascota),
-            icon: const Icon(Icons.add, color: verdePetCard),
-            label: const Text('Agregar Mascota',
-                style: TextStyle(
-                    color: verdePetCard, fontWeight: FontWeight.w600)),
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text('Tus Mascotas', style: tema.textTheme.titleMedium),
-        const SizedBox(height: 8),
-        if (repo.mascotas.isEmpty)
-          const Text('Aún no tienes mascotas registradas.'),
-        for (final m in repo.mascotas)
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: const CircleAvatar(child: Icon(Icons.pets)),
-            title: Text(m.nombre,
-                style: const TextStyle(fontWeight: FontWeight.bold)),
-            subtitle: Text(_proximo(repo, m)),
-            onTap: () => Navigator.of(context)
-                .pushNamed(Rutas.perfilMascota, arguments: m.id),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  tooltip: 'Editar',
-                  icon: const Icon(Icons.edit_outlined),
-                  onPressed: () {/* pendiente: pantalla de edición */},
-                ),
-                IconButton(
-                  tooltip: 'Agregar evento',
-                  icon: const Icon(Icons.add),
-                  onPressed: () {/* pendiente: nuevo evento */},
-                ),
-                IconButton(
-                  tooltip: 'Eliminar',
-                  icon: const Icon(Icons.delete_outline),
-                  onPressed: () => repo.eliminarMascota(m.id),
-                ),
-              ],
+    // Material propio: el ColoredBox del Scaffold taparía el ink splash
+    // del ListTile (assert de Flutter en modo debug).
+    return Material(
+      color: Colors.transparent,
+      child: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          Center(
+            child: TextButton.icon(
+              onPressed: () =>
+                  Navigator.of(context).pushNamed(Rutas.agregarMascota),
+              icon: const Icon(Icons.add, color: verdePetCard),
+              label: const Text('Agregar Mascota',
+                  style: TextStyle(
+                      color: verdePetCard, fontWeight: FontWeight.w600)),
             ),
           ),
-      ],
+          const SizedBox(height: 8),
+          Text('Tus Mascotas', style: tema.textTheme.titleMedium),
+          const SizedBox(height: 8),
+          if (repo.mascotas.isEmpty)
+            const Text('Aún no tienes mascotas registradas.'),
+          for (final m in repo.mascotas)
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const CircleAvatar(child: Icon(Icons.pets)),
+              title: Text(m.nombre,
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
+              subtitle: Text(_proximo(repo, m)),
+              onTap: () => Navigator.of(context)
+                  .pushNamed(Rutas.perfilMascota, arguments: m.id),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    tooltip: 'Editar',
+                    icon: const Icon(Icons.edit_outlined),
+                    // Igual que en Kotlin: "Editar" abre el perfil.
+                    onPressed: () => Navigator.of(context)
+                        .pushNamed(Rutas.perfilMascota, arguments: m.id),
+                  ),
+                  IconButton(
+                    tooltip: 'Agregar evento',
+                    icon: const Icon(Icons.add),
+                    onPressed: () =>
+                        Navigator.of(context).pushNamed(Rutas.nuevoEvento),
+                  ),
+                  IconButton(
+                    tooltip: 'Eliminar',
+                    icon: const Icon(Icons.delete_outline),
+                    onPressed: () => repo.eliminarMascota(m.id),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

@@ -3,6 +3,25 @@ const _meses = [
   'jul', 'ago', 'sep', 'oct', 'nov', 'dic',
 ];
 
+const _mesesLargos = [
+  'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+  'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+];
+
+/// Inicio del día de hoy (00:00 locales). Las fechas del proyecto se guardan
+/// siempre así, igual que `Dates.hoyInicioMillis()` en Android.
+DateTime hoyInicio() {
+  final n = DateTime.now();
+  return DateTime(n.year, n.month, n.day);
+}
+
+/// Inicio del día pedido (00:00 locales).
+DateTime inicioDia(int anio, int mes1a12, int dia) =>
+    DateTime(anio, mes1a12, dia);
+
+/// "Octubre" (mes en español con mayúscula inicial).
+String nombreMes(int anio, int mes1a12) => _mesesLargos[mes1a12 - 1];
+
 /// Regla civil: múltiplo de 4, salvo los siglos que no son múltiplo de 400.
 bool esBisiesto(int anio) =>
     (anio % 4 == 0 && anio % 100 != 0) || anio % 400 == 0;
@@ -10,6 +29,16 @@ bool esBisiesto(int anio) =>
 /// "24 oct 2026"
 String formatearFecha(DateTime fecha) =>
     '${fecha.day.toString().padLeft(2, '0')} ${_meses[fecha.month - 1]} ${fecha.year}';
+
+/// "24 oct" (botones de fecha del formulario Nuevo Evento).
+String formatearFechaCorta(DateTime fecha) =>
+    '${fecha.day.toString().padLeft(2, '0')} ${_meses[fecha.month - 1]}';
+
+/// Minutos desde medianoche → "10:00" (600 = 10:00).
+String formatearHora(int horaMinutos) {
+  final h = horaMinutos ~/ 60, m = horaMinutos % 60;
+  return '${h.toString().padLeft(2, '0')}:${m.toString().padLeft(2, '0')}';
+}
 
 /// Edad completa en años al día de hoy (nunca negativa).
 int edadEnAnos(DateTime nacimiento, {DateTime? hoy}) {

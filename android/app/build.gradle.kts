@@ -6,10 +6,15 @@ plugins {
 
 android {
     namespace = "com.petcard.petcard"
-    compileSdk = flutter.compileSdkVersion
+    // flutter_local_notifications 23+ exige API 37; el default de Flutter
+    // (36) se queda corto. Se usa el mayor de los dos.
+    compileSdk = maxOf(flutter.compileSdkVersion, 37)
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
+        // Requerido por flutter_local_notifications para avisos programados
+        // en versiones antiguas de Android.
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -46,4 +51,8 @@ kotlin {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }
